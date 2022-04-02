@@ -10,13 +10,11 @@ const stopWords = require('ukrainian-stopwords/stopwords_ua_list.json');
  * @returns {string} - processed and optimized text.
  * */
 function removeStopWords(text) {
-  let resultText = text;
-
-  stopWords.forEach((word) => {
-    resultText = resultText.replace(new RegExp(word, 'gi'), '');
-  });
-
-  return resultText;
+  return text
+    .toLowerCase()
+    .split(' ')
+    .filter((word) => !stopWords.includes(word))
+    .join(' ');
 }
 
 /**
@@ -25,7 +23,7 @@ function removeStopWords(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeSpecialSymbolsAndSpaces(text) {
+function removeSpecialSymbols(text) {
   return text.replace(/[^a-z\u0400-\u04FF\d]/gi, ' ');
 }
 
@@ -50,12 +48,12 @@ function removeExtraSpaces(text) {
 function optimizeText(text) {
   const newText = text.toLowerCase();
 
-  return [newText].map(removeStopWords).map(removeSpecialSymbolsAndSpaces).map(removeExtraSpaces)[0];
+  return [newText].map(removeStopWords).map(removeSpecialSymbols).map(removeExtraSpaces)[0];
 }
 
 module.exports = {
   optimizeText,
   removeStopWords,
-  removeSpecialSymbolsAndSpaces,
+  removeSpecialSymbols,
   removeExtraSpaces,
 };
