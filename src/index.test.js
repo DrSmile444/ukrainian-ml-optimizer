@@ -1,4 +1,4 @@
-const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords } = require('./index');
+const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords, stemWord } = require('./index');
 
 describe('Module Test', () => {
   describe('removeExtraSpaces', () => {
@@ -28,6 +28,17 @@ describe('Module Test', () => {
 
     it('should leave as it is if no stop words', () => {
       expect(removeStopWords('побачив це, здивувався')).toEqual('побачив це, здивувався');
+    });
+  });
+
+  describe('stemWord', () => {
+    it('it should stem the word', () => {
+      expect(stemWord('ти')).toEqual('ти');
+      // expect(stemWord('весна')).toEqual('весн');
+      // expect(stemWord('міський')).toEqual('міськ');
+      // expect(stemWord('пiдводна')).toEqual('пiдводн');
+      // expect(stemWord('пiдводний')).toEqual('пiдводн');
+      // expect(stemWord('виявляється')).toEqual('виявляєтьс');
     });
   });
 

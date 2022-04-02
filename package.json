@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "prepare": "husky install",
-    "lint": "npm-run-all --parallel lint:js",
+    "lint": "npm-run-all --parallel test lint:js",
     "lint:commit-name": "commitlint --edit",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "npm run lint:js -- --fix"
