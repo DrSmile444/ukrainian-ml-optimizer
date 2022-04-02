@@ -7,8 +7,7 @@
     "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
-    "lint": "npm-run-all --parallel lint:branch-name lint:js",
-    "lint:branch-name": "branch-name-lint ./.branchlintrc.json",
+    "lint": "npm-run-all --parallel lint:js",
     "lint:commit-name": "commitlint --edit",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "npm run lint:js -- --fix"
@@ -26,7 +25,6 @@
   "homepage": "https://github.com/DrSmile444/ukrainian-ml-optimizer#readme",
   "devDependencies": {
     "@commitlint/config-conventional": "^16.2.1",
-    "branch-name-lint": "^2.1.1",
     "commitlint": "^16.2.3",
     "eslint": "^8.12.0",
     "eslint-config-airbnb-base": "^15.0.0",
