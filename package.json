@@ -39,6 +39,7 @@
     "prettier": "^2.6.1"
   },
   "dependencies": {
-    "ukrainian-stopwords": "github:DrSmile444/Ukrainian-Stopwords"
+    "ukrainian-stopwords": "github:DrSmile444/Ukrainian-Stopwords",
+    "ukrstemmer": "^0.1.0"
   }
 }

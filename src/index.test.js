@@ -1,4 +1,4 @@
-const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords, stemWord } = require('./index');
+const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords, stemText } = require('./index');
 
 describe('Module Test', () => {
   describe('removeExtraSpaces', () => {
@@ -31,20 +31,23 @@ describe('Module Test', () => {
     });
   });
 
-  describe('stemWord', () => {
+  describe('stemText', () => {
     it('it should stem the word', () => {
-      expect(stemWord('ти')).toEqual('ти');
-      // expect(stemWord('весна')).toEqual('весн');
-      // expect(stemWord('міський')).toEqual('міськ');
-      // expect(stemWord('пiдводна')).toEqual('пiдводн');
-      // expect(stemWord('пiдводний')).toEqual('пiдводн');
-      // expect(stemWord('виявляється')).toEqual('виявляєтьс');
+      expect(stemText('ти')).toEqual('ти');
+      expect(stemText('весна')).toEqual('весн');
+      expect(stemText('міський')).toEqual('міськ');
+      expect(stemText('пiдводна')).toEqual('пiдводн');
+      expect(stemText('пiдводний')).toEqual('пiдводн');
+      expect(stemText('здивувався')).toEqual('здивував');
+      // Expected result but this stemmer works more aggressive.
+      // expect(stemText('виявляється')).toEqual('виявляєтьс');
+      expect(stemText('виявляється')).toEqual('виявляєт');
     });
   });
 
   describe('optimizeText', () => {
     it('should optimize text', () => {
-      expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('побачив це здивувався 12 3 test');
+      expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('побач це здивував 12 3 test');
     });
   });
 });
