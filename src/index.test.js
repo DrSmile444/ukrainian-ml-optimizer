@@ -33,7 +33,7 @@ describe('Module Test', () => {
 
   describe('removeStopWords', () => {
     it('should remove stop words', () => {
-      expect(removeStopWords('аби я побачив це, я би здивувався')).toEqual('побачив це, здивувався');
+      expect(removeStopWords('аби я побачив це, я би здивувався')).toEqual('аби я побачив це, я здивувався');
     });
 
     it('should leave as it is if no stop words', () => {
@@ -91,8 +91,9 @@ describe('Module Test', () => {
 
   describe('optimizeText', () => {
     it('should optimize text', () => {
-      expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('побач здивував test');
-      expect(optimizeText('аби я @mention email@test.com спеціальний символ 😝')).toEqual('спеціальн символ');
+      expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('аб я побач це я здивував test');
+      expect(optimizeText('аби я @mention email@test.com спеціальний символ 😝')).toEqual('аб я спеціальн символ');
+      expect(optimizeText('це наші?')).toEqual('це наш');
     });
   });
 });
