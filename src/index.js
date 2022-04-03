@@ -5,7 +5,8 @@ const stemmer = require('ukrstemmer');
  * */
 const stopWords = require('ukrainian-stopwords/stopwords_ua_list.json');
 
-const mentionRegexp = /@\D[^ ]+/g;
+const numberRegexp = /\d+/g;
+const mentionRegexp = /@\D[_]?[^ ]+/g;
 const urlRegexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
 const emailRegexp =
   /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g;
@@ -75,13 +76,23 @@ function removeMention(text) {
 }
 
 /**
- * Remove mentions from the text.
+ * Remove URLs from the text.
  *
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
 function removeUrl(text) {
   return text.replace(urlRegexp, '');
+}
+
+/**
+ * Remove numbers from the text.
+ *
+ * @param {string} text - text or message.
+ * @returns {string} - processed and optimized text.
+ * */
+function removeNumber(text) {
+  return text.replace(numberRegexp, '');
 }
 
 /**
@@ -100,6 +111,7 @@ function optimizeText(text) {
     .map(removeEmail)
     .map(removeMention)
     .map(removeSpecialSymbols)
+    .map(removeNumber)
     .map(removeExtraSpaces)
     .map(removeStopWords)
     .map(stemText)[0];
@@ -108,11 +120,13 @@ function optimizeText(text) {
 module.exports = {
   emailRegexp,
   mentionRegexp,
+  numberRegexp,
   urlRegexp,
   optimizeText,
   removeEmail,
   removeExtraSpaces,
   removeMention,
+  removeNumber,
   removeSpecialSymbols,
   removeStopWords,
   removeUrl,

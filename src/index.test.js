@@ -3,6 +3,7 @@ const {
   removeEmail,
   removeExtraSpaces,
   removeMention,
+  removeNumber,
   removeSpecialSymbols,
   removeStopWords,
   removeUrl,
@@ -64,6 +65,7 @@ describe('Module Test', () => {
   describe('removeMention', () => {
     it('should remove the mention', () => {
       expect(removeMention('test @mention 123')).toEqual('test  123');
+      expect(removeMention('test @mention_BY @mention_BY')).toEqual('test  ');
       expect(removeMention('test 123')).toEqual('test 123');
       expect(removeMention('test @mention')).toEqual('test ');
       expect(removeMention('test test@gmail.com')).toEqual('test test');
@@ -80,9 +82,16 @@ describe('Module Test', () => {
     });
   });
 
+  describe('removeNumber', () => {
+    it('should remove numbers', () => {
+      expect(removeNumber('123 asd')).toEqual(' asd');
+      expect(removeNumber('asd @mention')).toEqual('asd @mention');
+    });
+  });
+
   describe('optimizeText', () => {
     it('should optimize text', () => {
-      expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('побач здивував 12 3 test');
+      expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('побач здивував test');
       expect(optimizeText('аби я @mention email@test.com спеціальний символ 😝')).toEqual('спеціальн символ');
     });
   });
