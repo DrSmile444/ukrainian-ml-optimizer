@@ -50,6 +50,16 @@ function stemText(text) {
 }
 
 /**
+ * Remove mentions from the text.
+ *
+ * @param {string} text - text or message.
+ * @returns {string} - processed and optimized text.
+ * */
+function removeMention(text) {
+  return text.replace(/@.+ /g, ' ');
+}
+
+/**
  * @description
  * This function removes all special symbols, extra spaces, stop-words, and optimizes the text with stemming.
  * Main function that does all optimizations.
@@ -65,6 +75,7 @@ function optimizeText(text) {
 
 module.exports = {
   stemText,
+  removeMention,
   optimizeText,
   removeStopWords,
   removeSpecialSymbols,
