@@ -3,7 +3,7 @@ const stemmer = require('ukrstemmer');
 /**
  * @type {string[]}
  * */
-const stopWords = require('ukrainian-stopwords/stopwords_ua_list.json');
+const stopWords = require('./stopwords_ua_list.json');
 
 const numberRegexp = /\d+/g;
 const mentionRegexp = /@\D[_]?[^ ]+/g;
