@@ -5,7 +5,10 @@ const stemmer = require('ukrstemmer');
  * */
 const stopWords = require('ukrainian-stopwords/stopwords_ua_list.json');
 
+const mentionRegexp = /@\D[^ ]+/g;
 const urlRegexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
+const emailRegexp =
+  /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g;
 
 /**
  * Removes all stop words from the text.
@@ -52,13 +55,23 @@ function stemText(text) {
 }
 
 /**
+ * Remove emails from the text.
+ *
+ * @param {string} text - text or message.
+ * @returns {string} - processed and optimized text.
+ * */
+function removeEmail(text) {
+  return text.replace(emailRegexp, '');
+}
+
+/**
  * Remove mentions from the text.
  *
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
 function removeMention(text) {
-  return text.replace(/@\D[^ ]+/g, '');
+  return text.replace(mentionRegexp, '');
 }
 
 /**
@@ -82,16 +95,26 @@ function removeUrl(text) {
 function optimizeText(text) {
   const newText = text.toLowerCase();
 
-  return [newText].map(removeStopWords).map(removeSpecialSymbols).map(removeExtraSpaces).map(stemText)[0];
+  return [newText]
+    .map(removeUrl)
+    .map(removeEmail)
+    .map(removeMention)
+    .map(removeSpecialSymbols)
+    .map(removeExtraSpaces)
+    .map(removeStopWords)
+    .map(stemText)[0];
 }
 
 module.exports = {
+  emailRegexp,
+  mentionRegexp,
   urlRegexp,
-  stemText,
-  removeMention,
-  removeUrl,
   optimizeText,
-  removeStopWords,
-  removeSpecialSymbols,
+  removeEmail,
   removeExtraSpaces,
+  removeMention,
+  removeSpecialSymbols,
+  removeStopWords,
+  removeUrl,
+  stemText,
 };

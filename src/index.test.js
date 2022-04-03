@@ -1,4 +1,13 @@
-const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords, stemText, removeMention, removeUrl } = require('./index');
+const {
+  optimizeText,
+  removeEmail,
+  removeExtraSpaces,
+  removeMention,
+  removeSpecialSymbols,
+  removeStopWords,
+  removeUrl,
+  stemText,
+} = require('./index');
 
 describe('Module Test', () => {
   describe('removeExtraSpaces', () => {
@@ -45,6 +54,13 @@ describe('Module Test', () => {
     });
   });
 
+  describe('removeEmail', () => {
+    it('should remove email', () => {
+      expect(removeEmail('test@test.com 123')).toEqual(' 123');
+      expect(removeEmail('123 @mention 123')).toEqual('123 @mention 123');
+    });
+  });
+
   describe('removeMention', () => {
     it('should remove the mention', () => {
       expect(removeMention('test @mention 123')).toEqual('test  123');
@@ -66,7 +82,8 @@ describe('Module Test', () => {
 
   describe('optimizeText', () => {
     it('should optimize text', () => {
-      expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('побач це здивував 12 3 test');
+      expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('побач здивував 12 3 test');
+      expect(optimizeText('аби я @mention email@test.com спеціальний символ 😝')).toEqual('спеціальн символ');
     });
   });
 });
