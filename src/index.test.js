@@ -1,4 +1,4 @@
-const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords, stemText } = require('./index');
+const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords, stemText, removeMention } = require('./index');
 
 describe('Module Test', () => {
   describe('removeExtraSpaces', () => {
@@ -42,6 +42,15 @@ describe('Module Test', () => {
       // Expected result but this stemmer works more aggressive.
       // expect(stemText('виявляється')).toEqual('виявляєтьс');
       expect(stemText('виявляється')).toEqual('виявляєт');
+    });
+  });
+
+  describe('removeMention', () => {
+    it('should remove the mention', () => {
+      expect(removeMention('test @mention 123')).toEqual('test  123');
+      expect(removeMention('test 123')).toEqual('test 123');
+      expect(removeMention('test test@gmail.com')).toEqual('test test@gmail.com');
+      expect(removeMention('test test@gmail.com ')).toEqual('test test ');
     });
   });
 
