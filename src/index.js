@@ -58,7 +58,7 @@ function stemText(text) {
  * @returns {string} - processed and optimized text.
  * */
 function removeMention(text) {
-  return text.replace(/@.+ /g, ' ');
+  return text.replace(/@\D[^ ]+/g, '');
 }
 
 /**

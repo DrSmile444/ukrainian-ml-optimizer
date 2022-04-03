@@ -49,7 +49,8 @@ describe('Module Test', () => {
     it('should remove the mention', () => {
       expect(removeMention('test @mention 123')).toEqual('test  123');
       expect(removeMention('test 123')).toEqual('test 123');
-      expect(removeMention('test test@gmail.com')).toEqual('test test@gmail.com');
+      expect(removeMention('test @mention')).toEqual('test ');
+      expect(removeMention('test test@gmail.com')).toEqual('test test');
       expect(removeMention('test test@gmail.com ')).toEqual('test test ');
     });
   });
