@@ -5,6 +5,8 @@ const stemmer = require('ukrstemmer');
  * */
 const stopWords = require('ukrainian-stopwords/stopwords_ua_list.json');
 
+const urlRegexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
+
 /**
  * Removes all stop words from the text.
  *
@@ -60,6 +62,16 @@ function removeMention(text) {
 }
 
 /**
+ * Remove mentions from the text.
+ *
+ * @param {string} text - text or message.
+ * @returns {string} - processed and optimized text.
+ * */
+function removeUrl(text) {
+  return text.replace(urlRegexp, '');
+}
+
+/**
  * @description
  * This function removes all special symbols, extra spaces, stop-words, and optimizes the text with stemming.
  * Main function that does all optimizations.
@@ -74,8 +86,10 @@ function optimizeText(text) {
 }
 
 module.exports = {
+  urlRegexp,
   stemText,
   removeMention,
+  removeUrl,
   optimizeText,
   removeStopWords,
   removeSpecialSymbols,

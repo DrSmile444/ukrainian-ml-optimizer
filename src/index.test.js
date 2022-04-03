@@ -1,4 +1,4 @@
-const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords, stemText, removeMention } = require('./index');
+const { optimizeText, removeExtraSpaces, removeSpecialSymbols, removeStopWords, stemText, removeMention, removeUrl } = require('./index');
 
 describe('Module Test', () => {
   describe('removeExtraSpaces', () => {
@@ -51,6 +51,15 @@ describe('Module Test', () => {
       expect(removeMention('test 123')).toEqual('test 123');
       expect(removeMention('test test@gmail.com')).toEqual('test test@gmail.com');
       expect(removeMention('test test@gmail.com ')).toEqual('test test ');
+    });
+  });
+
+  describe('removeUrl', () => {
+    it('should remove url from text', () => {
+      expect(removeUrl('https://test.com/go-here please visit my site')).toEqual(' please visit my site');
+      expect(removeUrl('please visit my site https://test.com/go-here')).toEqual('please visit my site ');
+      expect(removeUrl('please visit my site https://test.com/go-here please')).toEqual('please visit my site  please');
+      expect(removeUrl('please visit my site')).toEqual('please visit my site');
     });
   });
 
