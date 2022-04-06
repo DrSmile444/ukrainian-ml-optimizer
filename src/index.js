@@ -5,6 +5,11 @@ const stemmer = require('ukrstemmer');
  * */
 const stopWords = require('./stopwords_ua_list.json');
 
+/**
+ * @type {string[]}
+ * */
+const stemWhitelist = require('./stem-whitelist.json');
+
 const numberRegexp = /\d+/g;
 const mentionRegexp = /@\D[_]?[^ ]+/g;
 const urlRegexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
@@ -52,7 +57,16 @@ function removeExtraSpaces(text) {
  * @returns {string} - processed and optimized text.
  * */
 function stemText(text) {
-  return text.split(' ').map(stemmer).join(' ');
+  return text
+    .split(' ')
+    .map((word) => {
+      if (stemWhitelist.includes(word)) {
+        return word;
+      }
+
+      return stemmer(word);
+    })
+    .join(' ');
 }
 
 /**
