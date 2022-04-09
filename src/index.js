@@ -148,7 +148,7 @@ function replaceLatinWithCyrillic(text) {
   enteredText = enteredText.replace(/m/g, 'м');
   enteredText = enteredText.replace(/n/g, 'н');
   enteredText = enteredText.replace(/o/g, 'о');
-  enteredText = enteredText.replace(/p/g, 'п');
+  enteredText = enteredText.replace(/p/g, 'р');
   enteredText = enteredText.replace(/r/g, 'р');
   enteredText = enteredText.replace(/s/g, 'с');
   enteredText = enteredText.replace(/š/g, 'ш');
@@ -157,6 +157,7 @@ function replaceLatinWithCyrillic(text) {
   enteredText = enteredText.replace(/v/g, 'в');
   enteredText = enteredText.replace(/z/g, 'з');
   enteredText = enteredText.replace(/ž/g, 'ж');
+  enteredText = enteredText.replace(/y/g, 'у');
 
   enteredText = enteredText.replace(/A/g, 'А');
   enteredText = enteredText.replace(/B/g, 'Б');
@@ -196,12 +197,17 @@ function replaceLatinWithCyrillic(text) {
  * @returns {string} - processed and optimized text.
  * */
 function removeLatinPartialLetters(text) {
-  const cyrillicLetters = text.replace(/[^\u0400-\u04FF\d]/gi, ' ').replace(/ /g, '');
-  const latinLetters = text.replace(/[^a-z\d]/gi, ' ').replace(/ /g, '');
+  return removeExtraSpaces(text)
+    .split(' ')
+    .map((word) => {
+      const cyrillicLetters = word.replace(/[^\u0400-\u04FF\d]/gi, ' ').replace(/ /g, '');
+      const latinLetters = word.replace(/[^a-z\d]/gi, ' ').replace(/ /g, '');
 
-  const latinRatio = latinLetters.length / cyrillicLetters.length;
+      const latinRatio = latinLetters.length / cyrillicLetters.length;
 
-  return latinRatio < 0.6 ? replaceLatinWithCyrillic(text) : text;
+      return latinRatio <= 1 ? replaceLatinWithCyrillic(word) : word;
+    })
+    .join(' ');
 }
 
 /**
@@ -215,19 +221,16 @@ function removeLatinPartialLetters(text) {
 function optimizeText(text) {
   const newText = text.toLowerCase();
 
-  return (
-    [newText]
-      .map(removeUrl)
-      .map(removeEmail)
-      .map(removeMention)
-      .map(removeSpecialSymbols)
-      .map(removeNumber)
-      .map(removeExtraSpaces)
-      .map(removeStopWords)
-      // need to be improved
-      // .map(removeLatinPartialLetters)
-      .map(stemText)[0]
-  );
+  return [newText]
+    .map(removeUrl)
+    .map(removeEmail)
+    .map(removeMention)
+    .map(removeSpecialSymbols)
+    .map(removeNumber)
+    .map(removeExtraSpaces)
+    .map(removeStopWords)
+    .map(removeLatinPartialLetters)
+    .map(stemText)[0];
 }
 
 module.exports = {

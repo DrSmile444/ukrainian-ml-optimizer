@@ -94,16 +94,23 @@ describe('Module Test', () => {
     it('should remove letters', () => {
       expect(removeLatinPartialLetters('teст тест')).toEqual('тест тест');
       expect(removeLatinPartialLetters('test test')).toEqual('test test');
-      expect(removeLatinPartialLetters('тест текст іїґ test')).toEqual('тест текст іїґ тест');
+      expect(removeLatinPartialLetters('тест текст іїґ test')).toEqual('тест текст іїґ test');
+      expect(removeLatinPartialLetters('пролeтіла')).toEqual('пролетіла');
+      expect(removeLatinPartialLetters('пролeтіла pакета і вийшов вибyх приїхав тaнк')).toEqual(
+        'пролетіла ракета і вийшов вибух приїхав танк',
+      );
     });
   });
 
   describe('optimizeText', () => {
     it('should optimize text', () => {
+      expect(optimizeText('some english, very english text')).toEqual('some english very english text');
       expect(optimizeText('аби я побачив це, я би здивувався!!!  12  3 test@ 😝')).toEqual('аб я побач це я здивував test');
       expect(optimizeText('аби я @mention email@test.com спеціальний символ 😝')).toEqual('аб я спеціальн символ');
       expect(optimizeText('це наші?')).toEqual('це наш');
       expect(optimizeText('щось не знайшов наші?')).toEqual('щось не знайшов наш');
+      expect(optimizeText('пролeтіла')).toEqual('пролетіл');
+      expect(optimizeText('пролeтіла pакета і вийшов вибyх приїхав тaнк')).toEqual('пролетіл ракет і вийшов вибух приїхав танк');
     });
   });
 });
