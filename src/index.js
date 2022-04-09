@@ -110,6 +110,101 @@ function removeNumber(text) {
 }
 
 /**
+ * Replace latin symbols with cyrillic
+ *
+ * @param {string} text - text or message.
+ * @returns {string} - processed and optimized text.
+ * */
+function replaceLatinWithCyrillic(text) {
+  let enteredText = text;
+
+  enteredText = enteredText.replace(/lj/g, 'љ');
+  enteredText = enteredText.replace(/Lj/g, 'Љ');
+  enteredText = enteredText.replace(/LJ/g, 'Љ');
+
+  enteredText = enteredText.replace(/nj/g, 'њ');
+  enteredText = enteredText.replace(/Nj/g, 'Њ');
+  enteredText = enteredText.replace(/NJ/g, 'Њ');
+
+  enteredText = enteredText.replace(/dž/g, 'џ');
+  enteredText = enteredText.replace(/Dž/g, 'Џ');
+  enteredText = enteredText.replace(/DŽ/g, 'Џ');
+
+  enteredText = enteredText.replace(/a/g, 'а');
+  enteredText = enteredText.replace(/b/g, 'б');
+  enteredText = enteredText.replace(/c/g, 'ц');
+  enteredText = enteredText.replace(/č/g, 'ч');
+  enteredText = enteredText.replace(/ć/g, 'ћ');
+  enteredText = enteredText.replace(/d/g, 'д');
+  enteredText = enteredText.replace(/đ/g, 'ђ');
+  enteredText = enteredText.replace(/e/g, 'е');
+  enteredText = enteredText.replace(/f/g, 'ф');
+  enteredText = enteredText.replace(/g/g, 'г');
+  enteredText = enteredText.replace(/h/g, 'х');
+  enteredText = enteredText.replace(/i/g, 'и');
+  enteredText = enteredText.replace(/j/g, 'ј');
+  enteredText = enteredText.replace(/k/g, 'к');
+  enteredText = enteredText.replace(/l/g, 'л');
+  enteredText = enteredText.replace(/m/g, 'м');
+  enteredText = enteredText.replace(/n/g, 'н');
+  enteredText = enteredText.replace(/o/g, 'о');
+  enteredText = enteredText.replace(/p/g, 'п');
+  enteredText = enteredText.replace(/r/g, 'р');
+  enteredText = enteredText.replace(/s/g, 'с');
+  enteredText = enteredText.replace(/š/g, 'ш');
+  enteredText = enteredText.replace(/t/g, 'т');
+  enteredText = enteredText.replace(/u/g, 'у');
+  enteredText = enteredText.replace(/v/g, 'в');
+  enteredText = enteredText.replace(/z/g, 'з');
+  enteredText = enteredText.replace(/ž/g, 'ж');
+
+  enteredText = enteredText.replace(/A/g, 'А');
+  enteredText = enteredText.replace(/B/g, 'Б');
+  enteredText = enteredText.replace(/C/g, 'Ц');
+  enteredText = enteredText.replace(/Č/g, 'Ч');
+  enteredText = enteredText.replace(/Ć/g, 'Ћ');
+  enteredText = enteredText.replace(/D/g, 'Д');
+  enteredText = enteredText.replace(/Đ/g, 'Ђ');
+  enteredText = enteredText.replace(/E/g, 'Е');
+  enteredText = enteredText.replace(/F/g, 'Ф');
+  enteredText = enteredText.replace(/G/g, 'Г');
+  enteredText = enteredText.replace(/H/g, 'Х');
+  enteredText = enteredText.replace(/I/g, 'И');
+  enteredText = enteredText.replace(/J/g, 'Ј');
+  enteredText = enteredText.replace(/K/g, 'К');
+  enteredText = enteredText.replace(/L/g, 'Л');
+  enteredText = enteredText.replace(/M/g, 'М');
+  enteredText = enteredText.replace(/N/g, 'Н');
+  enteredText = enteredText.replace(/O/g, 'О');
+  enteredText = enteredText.replace(/P/g, 'П');
+  enteredText = enteredText.replace(/R/g, 'Р');
+  enteredText = enteredText.replace(/S/g, 'С');
+  enteredText = enteredText.replace(/Š/g, 'Ш');
+  enteredText = enteredText.replace(/T/g, 'Т');
+  enteredText = enteredText.replace(/U/g, 'У');
+  enteredText = enteredText.replace(/V/g, 'В');
+  enteredText = enteredText.replace(/Z/g, 'З');
+  enteredText = enteredText.replace(/Ž/g, 'Ж');
+
+  return enteredText;
+}
+
+/**
+ * Remove latin letters if text is cyrillic
+ *
+ * @param {string} text - text or message.
+ * @returns {string} - processed and optimized text.
+ * */
+function removeLatinPartialLetters(text) {
+  const cyrillicLetters = text.replace(/[^\u0400-\u04FF\d]/gi, ' ').replace(/ /g, '');
+  const latinLetters = text.replace(/[^a-z\d]/gi, ' ').replace(/ /g, '');
+
+  const latinRatio = latinLetters.length / cyrillicLetters.length;
+
+  return latinRatio < 0.6 ? replaceLatinWithCyrillic(text) : text;
+}
+
+/**
  * @description
  * This function removes all special symbols, extra spaces, stop-words, and optimizes the text with stemming.
  * Main function that does all optimizations.
@@ -120,15 +215,19 @@ function removeNumber(text) {
 function optimizeText(text) {
   const newText = text.toLowerCase();
 
-  return [newText]
-    .map(removeUrl)
-    .map(removeEmail)
-    .map(removeMention)
-    .map(removeSpecialSymbols)
-    .map(removeNumber)
-    .map(removeExtraSpaces)
-    .map(removeStopWords)
-    .map(stemText)[0];
+  return (
+    [newText]
+      .map(removeUrl)
+      .map(removeEmail)
+      .map(removeMention)
+      .map(removeSpecialSymbols)
+      .map(removeNumber)
+      .map(removeExtraSpaces)
+      .map(removeStopWords)
+      // need to be improved
+      // .map(removeLatinPartialLetters)
+      .map(stemText)[0]
+  );
 }
 
 module.exports = {
@@ -139,6 +238,7 @@ module.exports = {
   optimizeText,
   removeEmail,
   removeExtraSpaces,
+  removeLatinPartialLetters,
   removeMention,
   removeNumber,
   removeSpecialSymbols,

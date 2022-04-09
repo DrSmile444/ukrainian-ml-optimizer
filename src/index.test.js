@@ -2,6 +2,7 @@ const {
   optimizeText,
   removeEmail,
   removeExtraSpaces,
+  removeLatinPartialLetters,
   removeMention,
   removeNumber,
   removeSpecialSymbols,
@@ -86,6 +87,14 @@ describe('Module Test', () => {
     it('should remove numbers', () => {
       expect(removeNumber('123 asd')).toEqual(' asd');
       expect(removeNumber('asd @mention')).toEqual('asd @mention');
+    });
+  });
+
+  describe('removeLatinPartialLetters', () => {
+    it('should remove letters', () => {
+      expect(removeLatinPartialLetters('teст тест')).toEqual('тест тест');
+      expect(removeLatinPartialLetters('test test')).toEqual('test test');
+      expect(removeLatinPartialLetters('тест текст іїґ test')).toEqual('тест текст іїґ тест');
     });
   });
 
