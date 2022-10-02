@@ -1,20 +1,11 @@
-/* eslint-disable @typescript-eslint/no-var-requires,global-require */
-const stemmer = require('ukrstemmer') as (str: string) => string;
+import stemmer from 'ukrstemmer';
+import stopWords from '../stopwords_ua_list.json';
+import stemWhitelist from '../stem-whitelist.json';
 
-/**
- * @type {string[]}
- * */
-const stopWords = require('../stopwords_ua_list.json') as string[];
-
-/**
- * @type {string[]}
- * */
-const stemWhitelist = require('../stem-whitelist.json') as string[];
-
-const numberRegexp = /\d+/g;
-const mentionRegexp = /@\D[_]?[^ ]+/g;
-const urlRegexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
-const emailRegexp =
+export const numberRegexp = /\d+/g;
+export const mentionRegexp = /@\D[_]?[^ ]+/g;
+export const urlRegexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
+export const emailRegexp =
   /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g;
 
 /**
@@ -23,7 +14,7 @@ const emailRegexp =
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeStopWords(text: string): string {
+export function removeStopWords(text: string): string {
   return text
     .toLowerCase()
     .split(' ')
@@ -37,7 +28,7 @@ function removeStopWords(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeSpecialSymbols(text: string): string {
+export function removeSpecialSymbols(text: string): string {
   return text.replace(/[^a-z\u0400-\u04FF\d]/gi, ' ');
 }
 
@@ -47,7 +38,7 @@ function removeSpecialSymbols(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeExtraSpaces(text: string): string {
+export function removeExtraSpaces(text: string): string {
   return text.replace(/\s\s+/g, ' ').trim();
 }
 
@@ -57,7 +48,7 @@ function removeExtraSpaces(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function stemText(text: string): string {
+export function stemText(text: string): string {
   return text
     .split(' ')
     .map((word) => {
@@ -65,7 +56,7 @@ function stemText(text: string): string {
         return word;
       }
 
-      return stemmer(word);
+      return stemmer(word) as string;
     })
     .join(' ');
 }
@@ -76,7 +67,7 @@ function stemText(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeEmail(text: string): string {
+export function removeEmail(text: string): string {
   return text.replace(emailRegexp, '');
 }
 
@@ -86,7 +77,7 @@ function removeEmail(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeMention(text: string): string {
+export function removeMention(text: string): string {
   return text.replace(mentionRegexp, '');
 }
 
@@ -96,7 +87,7 @@ function removeMention(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeUrl(text: string): string {
+export function removeUrl(text: string): string {
   return text.replace(urlRegexp, '');
 }
 
@@ -106,7 +97,7 @@ function removeUrl(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeNumber(text: string): string {
+export function removeNumber(text: string): string {
   return text.replace(numberRegexp, '');
 }
 
@@ -116,7 +107,7 @@ function removeNumber(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function replaceLatinWithCyrillic(text: string): string {
+export function replaceLatinWithCyrillic(text: string): string {
   let enteredText = text;
 
   enteredText = enteredText.replace(/lj/g, 'љ');
@@ -197,7 +188,7 @@ function replaceLatinWithCyrillic(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeLatinPartialLetters(text: string): string {
+export function removeLatinPartialLetters(text: string): string {
   return removeExtraSpaces(text)
     .split(' ')
     .map((word) => {
@@ -219,7 +210,7 @@ function removeLatinPartialLetters(text: string): string {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  */
-function optimizeText(text: string): string {
+export function optimizeText(text: string): string {
   const newText = text.toLowerCase();
 
   return [newText]
@@ -233,20 +224,3 @@ function optimizeText(text: string): string {
     .map(removeLatinPartialLetters)
     .map(stemText)[0];
 }
-
-module.exports = {
-  emailRegexp,
-  mentionRegexp,
-  numberRegexp,
-  urlRegexp,
-  optimizeText,
-  removeEmail,
-  removeExtraSpaces,
-  removeLatinPartialLetters,
-  removeMention,
-  removeNumber,
-  removeSpecialSymbols,
-  removeStopWords,
-  removeUrl,
-  stemText,
-};

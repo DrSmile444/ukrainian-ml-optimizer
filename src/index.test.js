@@ -10,7 +10,8 @@ const {
   removeStopWords,
   removeUrl,
   stemText,
-} = require('../dist/index');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+} = require('../dist/src/index');
 
 describe('Module Test', () => {
   describe('removeExtraSpaces', () => {

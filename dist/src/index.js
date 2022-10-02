@@ -1,17 +1,16 @@
-/* eslint-disable @typescript-eslint/no-var-requires,global-require */
-const stemmer = require('ukrstemmer');
-/**
- * @type {string[]}
- * */
-const stopWords = require('../stopwords_ua_list.json');
-/**
- * @type {string[]}
- * */
-const stemWhitelist = require('../stem-whitelist.json');
-const numberRegexp = /\d+/g;
-const mentionRegexp = /@\D[_]?[^ ]+/g;
-const urlRegexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
-const emailRegexp = /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g;
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.optimizeText = exports.removeLatinPartialLetters = exports.replaceLatinWithCyrillic = exports.removeNumber = exports.removeUrl = exports.removeMention = exports.removeEmail = exports.stemText = exports.removeExtraSpaces = exports.removeSpecialSymbols = exports.removeStopWords = exports.emailRegexp = exports.urlRegexp = exports.mentionRegexp = exports.numberRegexp = void 0;
+var ukrstemmer_1 = __importDefault(require("ukrstemmer"));
+var stopwords_ua_list_json_1 = __importDefault(require("../stopwords_ua_list.json"));
+var stem_whitelist_json_1 = __importDefault(require("../stem-whitelist.json"));
+exports.numberRegexp = /\d+/g;
+exports.mentionRegexp = /@\D[_]?[^ ]+/g;
+exports.urlRegexp = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
+exports.emailRegexp = /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/g;
 /**
  * Removes all stop words from the text.
  *
@@ -22,9 +21,10 @@ function removeStopWords(text) {
     return text
         .toLowerCase()
         .split(' ')
-        .filter((word) => !stopWords.includes(word))
+        .filter(function (word) { return !stopwords_ua_list_json_1.default.includes(word); })
         .join(' ');
 }
+exports.removeStopWords = removeStopWords;
 /**
  * Removes all special symbols and lefts only latin and cyrillic ones.
  *
@@ -34,6 +34,7 @@ function removeStopWords(text) {
 function removeSpecialSymbols(text) {
     return text.replace(/[^a-z\u0400-\u04FF\d]/gi, ' ');
 }
+exports.removeSpecialSymbols = removeSpecialSymbols;
 /**
  * Trims the message and removes two or more spaces in row.
  *
@@ -43,6 +44,7 @@ function removeSpecialSymbols(text) {
 function removeExtraSpaces(text) {
     return text.replace(/\s\s+/g, ' ').trim();
 }
+exports.removeExtraSpaces = removeExtraSpaces;
 /**
  * Remove ukrainian redundant word endings for ML.
  *
@@ -52,14 +54,15 @@ function removeExtraSpaces(text) {
 function stemText(text) {
     return text
         .split(' ')
-        .map((word) => {
-        if (stemWhitelist.includes(word)) {
+        .map(function (word) {
+        if (stem_whitelist_json_1.default.includes(word)) {
             return word;
         }
-        return stemmer(word);
+        return (0, ukrstemmer_1.default)(word);
     })
         .join(' ');
 }
+exports.stemText = stemText;
 /**
  * Remove emails from the text.
  *
@@ -67,8 +70,9 @@ function stemText(text) {
  * @returns {string} - processed and optimized text.
  * */
 function removeEmail(text) {
-    return text.replace(emailRegexp, '');
+    return text.replace(exports.emailRegexp, '');
 }
+exports.removeEmail = removeEmail;
 /**
  * Remove mentions from the text.
  *
@@ -76,8 +80,9 @@ function removeEmail(text) {
  * @returns {string} - processed and optimized text.
  * */
 function removeMention(text) {
-    return text.replace(mentionRegexp, '');
+    return text.replace(exports.mentionRegexp, '');
 }
+exports.removeMention = removeMention;
 /**
  * Remove URLs from the text.
  *
@@ -85,8 +90,9 @@ function removeMention(text) {
  * @returns {string} - processed and optimized text.
  * */
 function removeUrl(text) {
-    return text.replace(urlRegexp, '');
+    return text.replace(exports.urlRegexp, '');
 }
+exports.removeUrl = removeUrl;
 /**
  * Remove numbers from the text.
  *
@@ -94,8 +100,9 @@ function removeUrl(text) {
  * @returns {string} - processed and optimized text.
  * */
 function removeNumber(text) {
-    return text.replace(numberRegexp, '');
+    return text.replace(exports.numberRegexp, '');
 }
+exports.removeNumber = removeNumber;
 /**
  * Replace latin symbols with cyrillic
  *
@@ -103,7 +110,7 @@ function removeNumber(text) {
  * @returns {string} - processed and optimized text.
  * */
 function replaceLatinWithCyrillic(text) {
-    let enteredText = text;
+    var enteredText = text;
     enteredText = enteredText.replace(/lj/g, 'љ');
     enteredText = enteredText.replace(/Lj/g, 'Љ');
     enteredText = enteredText.replace(/LJ/g, 'Љ');
@@ -170,6 +177,7 @@ function replaceLatinWithCyrillic(text) {
     enteredText = enteredText.replace(/Ž/g, 'Ж');
     return enteredText;
 }
+exports.replaceLatinWithCyrillic = replaceLatinWithCyrillic;
 /**
  * Remove latin letters if text is cyrillic
  *
@@ -179,14 +187,15 @@ function replaceLatinWithCyrillic(text) {
 function removeLatinPartialLetters(text) {
     return removeExtraSpaces(text)
         .split(' ')
-        .map((word) => {
-        const cyrillicLetters = word.replace(/[^\u0400-\u04FF\d]/gi, ' ').replace(/ /g, '');
-        const latinLetters = word.replace(/[^a-z\d]/gi, ' ').replace(/ /g, '');
-        const latinRatio = latinLetters.length / cyrillicLetters.length;
+        .map(function (word) {
+        var cyrillicLetters = word.replace(/[^\u0400-\u04FF\d]/gi, ' ').replace(/ /g, '');
+        var latinLetters = word.replace(/[^a-z\d]/gi, ' ').replace(/ /g, '');
+        var latinRatio = latinLetters.length / cyrillicLetters.length;
         return latinRatio <= 1 ? replaceLatinWithCyrillic(word) : word;
     })
         .join(' ');
 }
+exports.removeLatinPartialLetters = removeLatinPartialLetters;
 /**
  * @description
  * This function removes all special symbols, extra spaces, stop-words, and optimizes the text with stemming.
@@ -196,7 +205,7 @@ function removeLatinPartialLetters(text) {
  * @returns {string} - processed and optimized text.
  */
 function optimizeText(text) {
-    const newText = text.toLowerCase();
+    var newText = text.toLowerCase();
     return [newText]
         .map(removeUrl)
         .map(removeEmail)
@@ -208,19 +217,4 @@ function optimizeText(text) {
         .map(removeLatinPartialLetters)
         .map(stemText)[0];
 }
-module.exports = {
-    emailRegexp,
-    mentionRegexp,
-    numberRegexp,
-    urlRegexp,
-    optimizeText,
-    removeEmail,
-    removeExtraSpaces,
-    removeLatinPartialLetters,
-    removeMention,
-    removeNumber,
-    removeSpecialSymbols,
-    removeStopWords,
-    removeUrl,
-    stemText,
-};
+exports.optimizeText = optimizeText;
