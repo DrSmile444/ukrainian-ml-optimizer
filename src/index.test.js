@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const {
   optimizeText,
   removeEmail,
@@ -9,7 +10,7 @@ const {
   removeStopWords,
   removeUrl,
   stemText,
-} = require('./index');
+} = require('../dist/index');
 
 describe('Module Test', () => {
   describe('removeExtraSpaces', () => {

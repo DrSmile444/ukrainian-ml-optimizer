@@ -1,14 +1,15 @@
-const stemmer = require('ukrstemmer');
+/* eslint-disable @typescript-eslint/no-var-requires,global-require */
+const stemmer = require('ukrstemmer') as (str: string) => string;
 
 /**
  * @type {string[]}
  * */
-const stopWords = require('./stopwords_ua_list.json');
+const stopWords = require('../stopwords_ua_list.json') as string[];
 
 /**
  * @type {string[]}
  * */
-const stemWhitelist = require('./stem-whitelist.json');
+const stemWhitelist = require('../stem-whitelist.json') as string[];
 
 const numberRegexp = /\d+/g;
 const mentionRegexp = /@\D[_]?[^ ]+/g;
@@ -22,7 +23,7 @@ const emailRegexp =
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeStopWords(text) {
+function removeStopWords(text: string): string {
   return text
     .toLowerCase()
     .split(' ')
@@ -36,7 +37,7 @@ function removeStopWords(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeSpecialSymbols(text) {
+function removeSpecialSymbols(text: string): string {
   return text.replace(/[^a-z\u0400-\u04FF\d]/gi, ' ');
 }
 
@@ -46,7 +47,7 @@ function removeSpecialSymbols(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeExtraSpaces(text) {
+function removeExtraSpaces(text: string): string {
   return text.replace(/\s\s+/g, ' ').trim();
 }
 
@@ -56,7 +57,7 @@ function removeExtraSpaces(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function stemText(text) {
+function stemText(text: string): string {
   return text
     .split(' ')
     .map((word) => {
@@ -75,7 +76,7 @@ function stemText(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeEmail(text) {
+function removeEmail(text: string): string {
   return text.replace(emailRegexp, '');
 }
 
@@ -85,7 +86,7 @@ function removeEmail(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeMention(text) {
+function removeMention(text: string): string {
   return text.replace(mentionRegexp, '');
 }
 
@@ -95,7 +96,7 @@ function removeMention(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeUrl(text) {
+function removeUrl(text: string): string {
   return text.replace(urlRegexp, '');
 }
 
@@ -105,7 +106,7 @@ function removeUrl(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeNumber(text) {
+function removeNumber(text: string): string {
   return text.replace(numberRegexp, '');
 }
 
@@ -115,7 +116,7 @@ function removeNumber(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function replaceLatinWithCyrillic(text) {
+function replaceLatinWithCyrillic(text: string): string {
   let enteredText = text;
 
   enteredText = enteredText.replace(/lj/g, 'љ');
@@ -196,7 +197,7 @@ function replaceLatinWithCyrillic(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  * */
-function removeLatinPartialLetters(text) {
+function removeLatinPartialLetters(text: string): string {
   return removeExtraSpaces(text)
     .split(' ')
     .map((word) => {
@@ -218,7 +219,7 @@ function removeLatinPartialLetters(text) {
  * @param {string} text - text or message.
  * @returns {string} - processed and optimized text.
  */
-function optimizeText(text) {
+function optimizeText(text: string): string {
   const newText = text.toLowerCase();
 
   return [newText]
